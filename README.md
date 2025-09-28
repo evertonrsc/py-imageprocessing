@@ -29,20 +29,16 @@ This repository is structured as follows:
 
 ### 📋 Prerequisites
 
-For compiling and executing the program, the following elements must be properly installed on the development environment:
-
-- [Python 3+](https://www.python.org)
-- [pdoc](https://pdoc.dev), for automatic documentation generation
-
-The [`requirements.txt`](requirements.txt) file lists the external packages required for this project:
+[Python 3+](https://www.python.org) must be installed on the development environment to execute the program. Additionally, the [`requirements.txt`](requirements.txt) file lists the external packages required for this project:
 
 | Package                                                   | Used version |
 |:----------------------------------------------------------|:------------:|
 | [requests](https://pypi.org/project/requests/)            |  2.32.5      |
 | [opencv-python](https://pypi.org/project/opencv-python/)  |  4.12.0.88   |
 | [google-genai](https://pypi.org/project/google-genai/)    |  1.39.1      |
+| [pdoc](https://pypi.org/project/pdoc/)                    |  15.0.4      |
 
-These packages require creating and using a [*virtual environment*](https://packaging.python.org/en/latest/tutorials/installing-packages/#creating-and-using-virtual-environments). A virtual environment allows Python packages to be installed in an isolated location for a particular application, rather than being installed system-wide as a measure of safety. To create a virtual environment with the [`venv`](https://docs.python.org/3/library/venv.html) tool, the following command must be used:
+These packages require creating and using a [*virtual environment*](https://packaging.python.org/en/latest/tutorials/installing-packages/#creating-and-using-virtual-environments). A virtual environment allows Python packages to be installed in an isolated location for a particular application, rather than being installed system-wide as a measure of safety. The following command creates a virtual environment with the [`venv`](https://docs.python.org/3/library/venv.html) tool:
 
 ```bash
 python3 -m venv runtime
@@ -54,7 +50,7 @@ This command creates a directory named `runtime` (the directory name is free of 
 source runtime/bin/activate
 ```
 
-From now on, the virtual environment will be used to install packages and running the program. To install the required packages, the following command must be used:
+From now on, the virtual environment will be used to install packages and running the program. The following command installs the required packages:
 
 ```bash
 pip3 install -r requirements.txt
@@ -95,6 +91,22 @@ python3 imageprocessing.py 5
 ```
 
 The downloaded images are saved into the `images` directory and their grayscale versions into the `gs-images` directory.
+
+### 🗒️ Generating documentation
+
+The generation and visualization of documentation is provided by [`pdoc`](https://pdoc.dev). The following command (also run in the virtual environment previously created) renders documentation as HTML pages:
+
+```bash
+pdoc ./src -o ./doc
+```
+
+The command will generate documentation for all source code files within the [`src`](src) directory into the [`doc`](doc) directory. It is also possible to render documentation live with the command
+
+```bash
+pdoc ./src
+```
+
+The command will result in opening a window in the browser running `pdoc` at a localhost server. In this case, the documentation pages will be automatically reloaded whenever changes are made to the source code.
 
 ---
 

@@ -1,3 +1,4 @@
 requests
 opencv-python
 google-genai
+pdoc

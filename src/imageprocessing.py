@@ -18,18 +18,34 @@ import sys
 from google import genai
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+"""Base source code directory"""
 
 IMAGES_DIR = os.path.join(BASE_DIR, "..", "images")
+"""Directory to store downloaded images"""
+
 GSIMAGES_DIR = os.path.join(BASE_DIR, "..", "gs-images")
+"""Directory to store processed images"""
 
 KEY_PATH = os.path.join(BASE_DIR, "..", "googleai.key")
+"""Path to the Gemini API key file"""
+
+GENAI_MODEL = "gemini-2.5-flash-lite"
+"""Generative AI model to use"""
+
 with open(KEY_PATH, "r") as key_file:
     API_KEY = key_file.readline().strip()
-
 client = genai.Client(api_key=API_KEY)
-genai_model = "gemini-2.5-flash-lite"
+"""Client object to interact with Google Gemini API"""
 
 def generate_image_urls(numimages):
+    """
+	Generates a list of public domain image URL from public domain image repositories
+    on the Web. The generated URLs should directly point to a valid image file in
+    either JPEG or PNG format.
+    
+    This specific implementation utilizes generative AI, more specifically
+    [Google Gemini](https://gemini.google.com/), to generate image URLs.
+	"""
     image_urls = []
     try:
         while len(image_urls) < numimages:
@@ -41,7 +57,7 @@ def generate_image_urls(numimages):
                 "plain text."
             ).format(n=numimages)
             generation_response = client.models.generate_content(
-                model=genai_model,
+                model=GENAI_MODEL,
                 contents=generation_prompt
             )
 
@@ -50,7 +66,7 @@ def generate_image_urls(numimages):
                 "Each URL must be on a new line. These are the contents: {text}"
             ).format(text=generation_response.text)
             extraction_response = client.models.generate_content(
-                model=genai_model,
+                model=GENAI_MODEL,
                 contents=extraction_prompt
             )
             
@@ -69,6 +85,9 @@ def generate_image_urls(numimages):
 
 
 def is_accessible(url):
+    """
+	Check if a URL is accessible by making an HTTP GET request to it
+	"""
     try:
         response = requests.get(url, timeout=5)
         return response.status_code == 200
@@ -76,7 +95,11 @@ def is_accessible(url):
         print(f"Error accessing {url}: {e}")
         return False
 
+
 def download_image(url, filename):
+    """
+	Downloads an image from its URL
+	"""
     useragent = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
                       "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
@@ -92,6 +115,10 @@ def download_image(url, filename):
 
 
 def to_grayscale(input_image, output_image):
+    """
+	Applies grayscale transformation to an image using facilities from
+    [OpenCV](https://github.com/openpnp/opencv)
+	"""
     image = cv2.imread(input_image)
     if image is None:
         print(f"Error: could not read {input_image}")
