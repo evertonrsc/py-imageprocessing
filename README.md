@@ -69,13 +69,16 @@ Interacting with the Gemini API requires an [API key](https://ai.google.dev/gemi
 The `generate_image_urls` function generates the list of image URLs. It uses two prompts submitted to Google Gemini via a client object that manages the interactions with the models. The first one requests the generation of image URLs:
 
 ```
-Generate {numimages} public domain image URLs (either JPEG or PNG format) from trusted public domain image repositories. The URL must directly point to a valid image file ending with .jpg or .png and the file size must be less than 200 KB. Provide the final image URLs in plain text.
+Generate {numimages} public domain image URLs (either JPEG or PNG format) from trusted public domain
+image repositories. The URL must directly point to a valid image file ending with .jpg or .png and 
+the file size must be less than 200 KB. Provide the final image URLs in plain text.
 ```
 
 However, there is no guarantee that this prompt generates only the list of image URLs. To circumvent this issue, a second prompt is used to retrieve only the list of URLs from the output of the first prompt:
 
 ```
-Extract all URLs from the following contents into a plain text list. Each URL must be on a new line. These are the contents: {output of the first prompt}
+Extract all URLs from the following contents into a plain text list. Each URL must be on a new line. 
+These are the contents: {output of the first prompt}
 ```
 
 ### ☑️ URL validity check
