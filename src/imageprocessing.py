@@ -1,10 +1,29 @@
+"""
+##### Description
+A program that applies grayscale transformation to images retrived 
+from URLs pointing to public domain images available on the Web.
+
+##### Author
+[Everton Cavalcante](mailto:everton.cavalcante@ufrn.br)
+
+##### Date
+September 24, 2025
+"""
+
 import cv2
 import os
 import requests
 import sys
+
 from google import genai
 
-with open("../googleai.key", "r") as key_file:
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+IMAGES_DIR = os.path.join(BASE_DIR, "..", "images")
+GSIMAGES_DIR = os.path.join(BASE_DIR, "..", "gs-images")
+
+KEY_PATH = os.path.join(BASE_DIR, "..", "googleai.key")
+with open(KEY_PATH, "r") as key_file:
     API_KEY = key_file.readline().strip()
 
 client = genai.Client(api_key=API_KEY)
@@ -12,7 +31,6 @@ genai_model = "gemini-2.5-flash-lite"
 
 def generate_image_urls(numimages):
     image_urls = []
-
     try:
         while len(image_urls) < numimages:
             generation_prompt = (
@@ -58,7 +76,6 @@ def is_accessible(url):
         print(f"Error accessing {url}: {e}")
         return False
 
-
 def download_image(url, filename):
     useragent = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -85,10 +102,12 @@ def to_grayscale(input_image, output_image):
 
 
 if __name__ == "__main__":
-    image_urls = generate_image_urls(1)
+    image_urls = generate_image_urls(int(sys.argv[1]))
 
+    # For each image URL, downloads the image and converts to grayscale
     for i in range(len(image_urls)):
-        imagefile = "../images" + os.sep + str(i+1) + os.path.splitext(image_urls[i])[1]
+        imagefile = IMAGES_DIR + os.sep + str(i+1) + os.path.splitext(image_urls[i])[1]
+        grayfile = GSIMAGES_DIR + os.sep + str(i+1) + os.path.splitext(image_urls[i])[1]
+
         download_image(image_urls[i], imagefile)
-        grayfile = "../gs-images" + os.sep + str(i+1) + os.path.splitext(image_urls[i])[1]
         to_grayscale(imagefile, grayfile)
