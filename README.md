@@ -34,7 +34,7 @@ For compiling and executing the program, the following elements must be properly
 - [Python 3+](https://www.python.org)
 - [pdoc](https://pdoc.dev), for automatic documentation generation
 
-The [`requirements.txt`] file lists the external packages required for this project:
+The [`requirements.txt`](requirements.txt) file lists the external packages required for this project:
 
 | Package                                                   | Used version |
 |:----------------------------------------------------------|:------------:|
@@ -42,7 +42,7 @@ The [`requirements.txt`] file lists the external packages required for this proj
 | [opencv-python](https://pypi.org/project/opencv-python/)  |  4.12.0.88   |
 | [google-genai](https://pypi.org/project/google-genai/)    |  1.39.1      |
 
-These packages require creating and using a [*virtual environment*](https://packaging.python.org/en/latest/tutorials/installing-packages/#creating-and-using-virtual-environments). A virtual environment allows Python packages to be installed in an isolated location for a particular application, rather than being installed system-wide as a measure of safety. To create a virtual environment in Python 3+ with the [`venv`](https://docs.python.org/3/library/venv.html) tool, the following command must be used:
+These packages require creating and using a [*virtual environment*](https://packaging.python.org/en/latest/tutorials/installing-packages/#creating-and-using-virtual-environments). A virtual environment allows Python packages to be installed in an isolated location for a particular application, rather than being installed system-wide as a measure of safety. To create a virtual environment with the [`venv`](https://docs.python.org/3/library/venv.html) tool, the following command must be used:
 
 ```bash
 python3 -m venv runtime
@@ -64,7 +64,7 @@ pip3 install -r requirements.txt
 
 The current implementation of this project utilizes [Google Gemini 2.5 Flash-Lite](https://ai.google.dev/gemini-api/docs/models) as the IA model to generate the list of image URLs. The integration with Google Gemini is done via the [Gemini API](https://ai.google.dev/api), more precisely using the [Google GenAI SDK](https://ai.google.dev/gemini-api/docs/libraries) available for Python to abstract calls to the methods defined in the API.
 
-Interacting with the Gemini API requires an [API key](https://ai.google.dev/gemini-api/docs/api-key). In the current implementation, the API key is [explicitly provided](https://ai.google.dev/gemini-api/docs/api-key#provide-api-key-explicitly) from a file. A personal, work, or school Google account is needed.
+Interacting with the Gemini API requires an [API key](https://ai.google.dev/gemini-api/docs/api-key). In the current implementation, the API key is [explicitly provided](https://ai.google.dev/gemini-api/docs/api-key#provide-api-key-explicitly) from a file. A personal, work, or school Google account is needed to create a project and an API key via [Google AI Studio](https://aistudio.google.com/app/api-keys).
 
 The `generate_image_urls` function generates the list of image URLs. It uses two prompts submitted to Google Gemini via a client object that manages the interactions with the models. The first one requests the generation of image URLs:
 
@@ -75,12 +75,12 @@ Generate {numimages} public domain image URLs (either JPEG or PNG format) from t
 However, there is no guarantee that this prompt generates only the list of image URLs. To circumvent this issue, a second prompt is used to retrieve only the list of URLs from the output of the first prompt:
 
 ```
-Extract all URLs from the following contents into a plain text list. Each URL must be on a new line.  These are the contents: {output of the first prompt}
+Extract all URLs from the following contents into a plain text list. Each URL must be on a new line. These are the contents: {output of the first prompt}
 ```
 
 ### ☑️ URL validity check
 
-To avoid generating a URL to an image that is not directly accessible (e.g., image not found, redirecting to another page where the image is posted, etc.), an HTTP GET request is done for each generated URL. In case of the URL is inaccessible, another URL is generated. This is done until reaching the number of URLs defined for the program. The downloaded images are saved into a project directory named as `images`.
+To avoid generating a URL to an image that is not directly accessible (e.g., image not found, redirecting to another page where the image is posted, etc.), an HTTP GET request is done for each generated URL. In case of the URL is inaccessible, another URL is generated. This is done until reaching the number of URLs defined for the program.
 
 ### ▶️ Running the program
 
@@ -89,6 +89,8 @@ The program must be run from the virtual environment previously created with the
 ```bash
 python3 imageprocessing.py 5
 ```
+
+The downloaded images are saved into the `images` directory and their grayscale versions into the `gs-images` directory.
 
 ---
 
