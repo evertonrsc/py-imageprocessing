@@ -51,10 +51,10 @@ def generate_image_urls(numimages):
         while len(image_urls) < numimages:
             generation_prompt = (
                 "Generate {n} public domain image URL (either JPEG or PNG format) from "
-                "trusted public domain image repositories, except any Wikimedia-related ones."
-                "The URL must directly point to a valid image file ending with .jpg or .png "
-                "and the file size must be less than 200 KB. Provide the final image URLs in "
-                "plain text."
+                "trusted public domain image repositories. Exclude Wikimedia Commons "
+                "and related sites. The URL must directly point to a valid image file "
+                "ending with .jpg or .png, and the file size must be less than 200 KB. "
+                "Provide the final image URLs in plain text."
             ).format(n=numimages)
             generation_response = client.models.generate_content(
                 model=GENAI_MODEL,
