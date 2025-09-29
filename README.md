@@ -66,9 +66,9 @@ The `generate_image_urls` function generates the list of image URLs. It uses two
 
 ```
 Generate {numimages} public domain image URLs (either JPEG or PNG format) from trusted 
-public domain image repositories. The URL must directly point to a valid image file 
-ending with .jpg or .png and the file size must be less than 200 KB. Provide the final 
-image URLs in plain text.
+public domain image repositories. Exclude Wikimedia Commons and related sites.
+The URL must directly point to a valid image file ending with .jpg or .png, and the 
+file size must be less than 200 KB. Provide the final image URLs in plain text.
 ```
 
 However, there is no guarantee that this prompt generates only the list of image URLs. To circumvent this issue, a second prompt is used to retrieve only the list of URLs from the output of the first prompt:
